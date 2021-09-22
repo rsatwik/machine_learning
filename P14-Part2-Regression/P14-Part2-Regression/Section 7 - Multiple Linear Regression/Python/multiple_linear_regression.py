@@ -18,9 +18,21 @@ ct = ColumnTransformer(transformers=[('encoder', OneHotEncoder(), [3])], remaind
 X = np.array(ct.fit_transform(X))
 print(X)
 
+X = X[:,1:]
+X = np.append(arr = np.ones((50,1)).astype(float),values=X,axis=1)
+
+import statsmodels.api as sm
+X_opt = X[:,[0,3,5]]
+
+X_opt = np.array(X_opt, dtype=float)
+
+regressor_OLS = sm.OLS(endog=y, exog=X_opt).fit()
+regressor_OLS.summary()
+
+
 # Splitting the dataset into the Training set and Test set
 from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+X_train, X_test, y_train, y_test = train_test_split(X_opt, y, test_size = 0.2, random_state = 0)
 
 # Training the Multiple Linear Regression model on the Training set
 from sklearn.linear_model import LinearRegression
